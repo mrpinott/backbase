@@ -25,9 +25,9 @@ public class City {
      * Coordinates class allows Gson to serialize the coordinates.
      */
     public class Coordinates {
-        @SerializedName("lon")
-        public double mLatitude;
         @SerializedName("lat")
+        public double mLatitude;
+        @SerializedName("lon")
         public double mLongitude;
     }
 }
