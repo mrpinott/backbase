@@ -86,6 +86,7 @@ public class CityRecyclerViewAdapter extends RecyclerView.Adapter<CityRecyclerVi
                 @Override
                 public void onClick(View v) {
                     Log.d(CityRecyclerViewAdapter.class.getName(), "city: " + myArray[getLayoutPosition()].mName);
+                    // TODO: 8/20/18 Replace with map fragment navigation, shortcut for time constraint
                     // launch map_view
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" +
                             myArray[getLayoutPosition()].mCoordinates.mLatitude + "," + myArray[getLayoutPosition()].mCoordinates.mLongitude+"?z=zoom"));
