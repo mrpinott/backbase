@@ -1,13 +1,14 @@
 package com.josepinott.cities;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.Gson;
-import com.josepinott.cities.model.City;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -16,11 +17,49 @@ import static org.junit.Assert.*;
 
 public class CitySearchUnitTest {
 
-    private TreeSet<City> mCitiesMap;
+    private TreeSet<City> mCitiesMap = new TreeSet<>();
 
     @Test
-    public void testLoadAndSearchCityData() {
-        final float expected = 9;
+    public void testLoadCityData() {
+        initData();
+        // verify data results
+        assertEquals("Data size equal to 8", 8, mCitiesMap.size(), 0);
+    }
+
+    @Test
+    public void testValidSearchCityData() {
+        initData();
+        List<City> cityList = new ArrayList<>();
+        for (City city : mCitiesMap) {
+            if (city.mName.toLowerCase().startsWith("Rastnik".toLowerCase()))
+                cityList.add(city);
+        }
+        // verify data results
+        assertEquals("Search for cities with prefix: Rastnik", 1, cityList.size(), 0);
+
+        // test for valid input Murava
+        cityList.clear();
+        for (City city : mCitiesMap) {
+            if (city.mName.toLowerCase().startsWith("s".toLowerCase()))
+                cityList.add(city);
+        }
+        // verify data results
+        assertEquals("Search for cities with prefix: s", 2, cityList.size(), 0);
+    }
+
+    @Test
+    public void testInValidSearchCityData() {
+        initData();
+        List<City> cityList = new ArrayList<>();
+        for (City city : mCitiesMap) {
+            if (city.mName.toLowerCase().startsWith("!.".toLowerCase()))
+                cityList.add(city);
+        }
+        // verify data results
+        assertEquals("Search for cities with prefix: !.", 0, cityList.size(), 0);
+    }
+
+    private void initData() {
         try {
             String s = "[" +
                     "{\"country\":\"UA\",\"name\":\"Hurzuf\",\"_id\":707860,\"coord\":{\"lon\":34.283333,\"lat\":44.549999}}," +
@@ -38,53 +77,29 @@ public class CitySearchUnitTest {
             Gson gson = new Gson();
             int arraySize = jsonArray.length();
 
-            // perform insertion Sort for any Comparable Objects
-            Comparable temp;
             for(int i=0;i< arraySize; i++) {
                 City city = gson.fromJson(jsonArray.getJSONObject(i).toString(), City.class);
-                city.mDisplayLabel = city.mName + ", " + city.mCountry;
-                // fix single quote prefix
-                if(city.mName.charAt(0) == '‘' || city.mName.charAt(0) == '\'')
-                    city.mName = city.mName.substring(1);
                 mCitiesMap.add(city);
             }
-            // verify data results
-            assertEquals("Data size equal to 9", expected, mCitiesMap.size(), 0);
-            testSearchCityData();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /**
-     * Boundary value testing should be done at a minimum, but I already have a day job ;-)
-     */
-    private void testSearchCityData() {
-        // test for valid input Rastnik
-        List<City> cityList = new ArrayList<>();
-        for (City city : mCitiesMap) {
-            if (city.mName.toLowerCase().startsWith("Rastnik"))
-                cityList.add(city);
-        }
-        // verify data results
-        assertEquals("Search for cities with prefix: Rastnik", 2, cityList.size(), 0);
+    class City implements Comparable {
 
-        // test for valid input Murava
-        cityList.clear();
-        for (City city : mCitiesMap) {
-            if (city.mName.toLowerCase().startsWith("Murava"))
-                cityList.add(city);
-        }
-        // verify data results
-        assertEquals("Search for cities with prefix: Murava", 1, cityList.size(), 0);
+        @SerializedName("country")
+        public String mCountry;
 
-        // test for valid input al
-        cityList.clear();
-        for (City city : mCitiesMap) {
-            if (city.mName.toLowerCase().startsWith("!."))
-                cityList.add(city);
+        @SerializedName("name")
+        public String mName;
+
+        @Override
+        public int compareTo(@NonNull Object o) {
+            City city = (City) o;
+            int result = this.mName.compareTo(city.mName);
+            if (result != 0) return result;
+            return this.mCountry.compareTo(city.mCountry);
         }
-        // verify data results
-        assertEquals("Search for cities with prefix: !.", 0, cityList.size(), 0);
     }
 }
