@@ -8,7 +8,41 @@
     tools:context=".MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_box">
 
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:iconifiedByDefault="false"
+                android:padding="2dp"
+                android:queryHint="Search...." />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- RecyclerView -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_results_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search_box"
+            android:layout_marginTop="5dp"
+            android:scrollbars="vertical"/>
+
+        <!--Progress indicator-->
+        <ProgressBar
+            android:id="@+id/search_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

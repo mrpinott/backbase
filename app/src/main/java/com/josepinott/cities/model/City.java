@@ -19,6 +19,8 @@ public class City {
     @SerializedName("coord")
     public Coordinates mCoordinates;
 
+    public String mDisplayLabel;
+
     /**
      * Coordinates class allows Gson to serialize the coordinates.
      */
