@@ -88,7 +88,7 @@ public class CityRecyclerViewAdapter extends RecyclerView.Adapter<CityRecyclerVi
                     Log.d(CityRecyclerViewAdapter.class.getName(), "city: " + myArray[getLayoutPosition()].mName);
                     // launch map_view
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" +
-                            myArray[getLayoutPosition()].mCoordinates.mLatitude + "," + myArray[getLayoutPosition()].mCoordinates.mLongitude));
+                            myArray[getLayoutPosition()].mCoordinates.mLatitude + "," + myArray[getLayoutPosition()].mCoordinates.mLongitude+"?z=zoom"));
                     mapIntent.setPackage("com.google.android.apps.maps");
                     if (mapIntent.resolveActivity(v.getContext().getPackageManager()) != null) {
                         v.getContext().startActivity(mapIntent);
