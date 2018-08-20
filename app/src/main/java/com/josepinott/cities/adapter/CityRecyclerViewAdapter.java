@@ -1,6 +1,8 @@
 package com.josepinott.cities.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,11 +50,9 @@ public class CityRecyclerViewAdapter extends RecyclerView.Adapter<CityRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        // - get element from data set and replace the contents of the view with that element
-
+        // get element from data set and replace the contents of the view with that element
         City city = myArray[i];
         viewHolder.mTitle.setText(city.mDisplayLabel);
-
     }
 
     // Return the size of your dataset (invoked by the recycler_view_city_item manager)
@@ -61,9 +61,9 @@ public class CityRecyclerViewAdapter extends RecyclerView.Adapter<CityRecyclerVi
         return myArray.length;
     }
 
-    public City getItem(int pos) {
-        return myArray[pos];
-    }
+//    public City getItem(int pos) {
+//        return myArray[pos];
+//    }
 
     /**
      * TreeSet setter
@@ -80,13 +80,19 @@ public class CityRecyclerViewAdapter extends RecyclerView.Adapter<CityRecyclerVi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         private TextView mTitle;
-
         private ViewHolder(View v) {
             super(v);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(CityRecyclerViewAdapter.class.getName(), "city: " + myArray[getLayoutPosition()].mName);
+                    // launch map_view
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" +
+                            myArray[getLayoutPosition()].mCoordinates.mLatitude + "," + myArray[getLayoutPosition()].mCoordinates.mLongitude));
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(v.getContext().getPackageManager()) != null) {
+                        v.getContext().startActivity(mapIntent);
+                    }
                 }
             });
             mTitle = v.findViewById(R.id.city);

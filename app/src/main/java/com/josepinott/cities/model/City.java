@@ -26,8 +26,8 @@ public class City {
      */
     public class Coordinates {
         @SerializedName("lon")
-        double mLatitude;
+        public double mLatitude;
         @SerializedName("lat")
-        double mLongitude;
+        public double mLongitude;
     }
 }
